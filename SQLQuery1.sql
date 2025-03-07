@@ -53,18 +53,25 @@ INSERT INTO Grupe (Nume, An_Studiu) VALUES
 
 -- 8. Inserarea studenților
 INSERT INTO Studenti (Nume, Prenume, Data_Nasterii, ID_Grupa, Email) VALUES 
-('Popescu', 'Ion', '2003-05-12', 1, 'ion.popescu@example.com'),
-('Ionescu', 'Maria', '2002-08-24', 1, 'maria.ionescu@example.com'),
-('Radu', 'Andrei', '2003-01-17', 2, 'andrei.radu@example.com');
+('Popescu', 'Ion', '2003-05-12', 1, 'ion.popescu1@example.com'),
+('Ionescu', 'Maria', '2002-08-24', 1, 'maria.ionescu1@example.com'),
+('Radu', 'Andrei', '2003-01-17', 2, 'andrei.radu1@example.com'),
+('Georgescu', 'Daniel', '2003-06-15', 1, 'daniel.georgescu@example.com'),
+('Matei', 'Elena', '2002-07-22', 1, 'elena.matei@example.com'),
+('Vasile', 'Alexandru', '2003-04-10', 2, 'alex.vasile@example.com');
 
 -- 9. Inserarea profesorilor
 INSERT INTO Profesori (Nume, Prenume, Specializare) VALUES 
 ('Dumitrescu', 'Cristian', 'Matematica'),
-('Ionescu', 'Ana', 'Informatica');
+('Ionescu', 'Ana', 'Informatica'),
+('Popa', 'Mihai', 'Fizica'),
+('Georgescu', 'Elena', 'Chimie'),
+('Stefan', 'Adrian', 'Electronica');
 
 -- 10. Inserarea cursurilor
 INSERT INTO Cursuri (Nume, ID_Profesor) VALUES 
-('Algoritmica', 2), ('Baze de date', 2), ('Analiza Matematica', 1);
+('Algoritmica', 2), ('Baze de date', 2), ('Analiza Matematica', 1),
+('Fizica Aplicata', 3), ('Chimie Generala', 4), ('Circuite Electronice', 5);
 
 -- 11. Inserarea notelor
 INSERT INTO Note (ID_Student, ID_Curs, Nota) VALUES 
