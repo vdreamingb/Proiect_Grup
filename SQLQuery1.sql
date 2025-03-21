@@ -21,6 +21,19 @@ CREATE TABLE Studenti (
     CONSTRAINT CHK_DataNasterii CHECK (Data_Nasterii <= GETDATE())
 );
 
+-- 7. Crearea tabelului Raioane
+CREATE TABLE Raioane (
+    ID_Raion INT PRIMARY KEY IDENTITY(1,1),
+    Nume NVARCHAR(100) NOT NULL
+);
+
+-- 8. Crearea tabelului Localitati
+CREATE TABLE Localitati (
+    ID_Localitate INT PRIMARY KEY IDENTITY(1,1),
+    Nume NVARCHAR(100) NOT NULL,
+    ID_Raion INT FOREIGN KEY REFERENCES Raioane(ID_Raion) ON DELETE CASCADE
+);
+
 -- 4. Crearea tabelului Profesori
 CREATE TABLE Profesori (
     ID_Profesor INT PRIMARY KEY IDENTITY(1,1),
@@ -196,3 +209,15 @@ GROUP BY R.Nume;
 SELECT Specialitate, COUNT(ID_Grupa) AS Nr_Grupe
 FROM Grupe
 GROUP BY Special
+
+SELECT Localitate, COUNT(*) as numar_studenti
+FROM Studenti
+GROUP BY Localitate;
+
+ALTER TABLE Studenti
+ADD ID_Localitate INT FOREIGN KEY REFERENCES Localitati(ID_Localitate) ON DELETE CASCADE;
+
+SELECT L.Nume AS Localitate, COUNT(S.ID_Student) AS Student_Count
+FROM Studenti S
+JOIN Localitati L ON S.ID_Localitate = L.ID_Localitate
+GROUP BY L.Nume;
