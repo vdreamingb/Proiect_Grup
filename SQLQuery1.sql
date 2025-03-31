@@ -7,49 +7,51 @@ USE CEITI;
 CREATE TABLE Grupe (
     ID_Grupa INT PRIMARY KEY IDENTITY(1,1),
     Nume NVARCHAR(50) UNIQUE NOT NULL,
-    An_Studiu INT CHECK (An_Studiu BETWEEN 1 AND 4) NOT NULL
+    An_Studiu INT CHECK (An_Studiu BETWEEN 1 AND 4) NOT NULL,
+    Specialitate NVARCHAR(60) NOT NULL
 );
 
--- 3. Crearea tabelului Studenti
-CREATE TABLE Studenti (
-    ID_Student INT PRIMARY KEY IDENTITY(1,1),
-    Nume NVARCHAR(50) NOT NULL,
-    Prenume NVARCHAR(50) NOT NULL,
-    Data_Nasterii DATE,
-    ID_Grupa INT FOREIGN KEY REFERENCES Grupe(ID_Grupa) ON DELETE CASCADE,
-    Email NVARCHAR(100) UNIQUE,
-    CONSTRAINT CHK_DataNasterii CHECK (Data_Nasterii <= GETDATE())
-);
-
--- 7. Crearea tabelului Raioane
+-- 2. Crearea tabelului Raioane
 CREATE TABLE Raioane (
     ID_Raion INT PRIMARY KEY IDENTITY(1,1),
     Nume NVARCHAR(100) NOT NULL
 );
 
--- 8. Crearea tabelului Localitati
+-- 3. Crearea tabelului Localitati
 CREATE TABLE Localitati (
     ID_Localitate INT PRIMARY KEY IDENTITY(1,1),
     Nume NVARCHAR(100) NOT NULL,
     ID_Raion INT FOREIGN KEY REFERENCES Raioane(ID_Raion) ON DELETE CASCADE
 );
 
--- 4. Crearea tabelului Profesori
+-- 4. Crearea tabelului Studenti
+CREATE TABLE Studenti (
+    ID_Student INT PRIMARY KEY IDENTITY(1,1),
+    Nume NVARCHAR(50) NOT NULL,
+    Prenume NVARCHAR(50) NOT NULL,
+    Data_Nasterii DATE CHECK (Data_Nasterii <= GETDATE()),
+    ID_Grupa INT FOREIGN KEY REFERENCES Grupe(ID_Grupa) ON DELETE CASCADE,
+    Email NVARCHAR(100) UNIQUE,
+    ID_Localitate INT FOREIGN KEY REFERENCES Localitati(ID_Localitate) ON DELETE CASCADE
+);
+
+-- 5. Crearea tabelului Profesori
 CREATE TABLE Profesori (
     ID_Profesor INT PRIMARY KEY IDENTITY(1,1),
     Nume NVARCHAR(50) NOT NULL,
     Prenume NVARCHAR(50) NOT NULL,
-    Specializare NVARCHAR(100) NOT NULL
+    Specializare NVARCHAR(100) NOT NULL,
+    Catedra NVARCHAR(60) NOT NULL
 );
 
--- 5. Crearea tabelului Cursuri
+-- 6. Crearea tabelului Cursuri
 CREATE TABLE Cursuri (
     ID_Curs INT PRIMARY KEY IDENTITY(1,1),
     Nume NVARCHAR(100) NOT NULL,
     ID_Profesor INT FOREIGN KEY REFERENCES Profesori(ID_Profesor) ON DELETE SET NULL
 );
 
--- 6. Crearea tabelului Note
+-- 7. Crearea tabelului Note
 CREATE TABLE Note (
     ID_Nota INT PRIMARY KEY IDENTITY(1,1),
     ID_Student INT FOREIGN KEY REFERENCES Studenti(ID_Student) ON DELETE CASCADE,
@@ -57,6 +59,33 @@ CREATE TABLE Note (
     Nota DECIMAL(3,1) CHECK (Nota BETWEEN 1 AND 10),
     Data_Acordarii DATE DEFAULT GETDATE()
 );
+
+ALTER TABLE Profesori ADD Catedra NVARCHAR(60)
+
+ALTER TABLE Grupe ADD Specialitate NVARCHAR(60)
+
+INSERT INTO Grupe (Nume, An_Studiu, Specialitate) VALUES
+('P-2323', 1, 'Informatica'),
+('W-2321', 1, 'Matematica'),
+('T-2319', 1, 'Fizica'),
+('E-2305', 1, 'Chimie'),
+('M-2325', 1, 'Electronica'),
+('P-2420', 2, 'Informatica'),
+('W-2418', 2, 'Matematica'),
+('T-2409', 2, 'Fizica'),
+('E-2411', 2, 'Chimie'),
+('M-2427', 2, 'Electronica'),
+('P-2522', 3, 'Informatica'),
+('W-2515', 3, 'Matematica'),
+('T-2507', 3, 'Fizica'),
+('E-2513', 3, 'Chimie'),
+('M-2529', 3, 'Electronica'),
+('P-2621', 4, 'Informatica'),
+('W-2616', 4, 'Matematica'),
+('T-2608', 4, 'Fizica'),
+('E-2614', 4, 'Chimie'),
+('M-2630', 4, 'Electronica');
+
 
 -- 7. Inserarea grupelor
 INSERT INTO Studenti (Nume, Prenume, Data_Nasterii, ID_Grupa, Email, Localitate) VALUES 
@@ -80,6 +109,8 @@ INSERT INTO Studenti (Nume, Prenume, Data_Nasterii, ID_Grupa, Email, Localitate)
 ('Marinescu', 'Diana', '2003-08-10', 14, 'diana.marinescu@example.com', 'Balti'),
 ('Neagu', 'Stefan', '2003-01-05', 15, 'stefan.neagu@example.com', 'Orhei'),
 ('Nistor', 'Madalina', '2002-11-22', 16, 'madalina.nistor@example.com', 'Cahul');
+
+
 
 -- Adăugarea de noi profesori
 INSERT INTO Profesori (Nume, Prenume, Specializare, Catedra) VALUES 
@@ -116,10 +147,10 @@ INSERT INTO Cursuri (Nume, ID_Profesor) VALUES
 
 -- Adăugarea de noi note
 INSERT INTO Note (ID_Student, ID_Curs, Nota) VALUES 
-(1, 1, 9.5), (2, 2, 8.0), (3, 3, 7.5), (4, 4, 6.0), (5, 5, 5.0), (6, 6, 4.5),
+(4, 4, 6.0), (5, 5, 5.0), (6, 6, 4.5),
 (7, 7, 9.0), (8, 8, 8.5), (9, 9, 7.0), (10, 10, 6.5), (11, 11, 9.5), (12, 12, 8.0),
 (13, 13, 7.5), (14, 14, 6.0), (15, 15, 5.0), (16, 16, 4.5), (17, 17, 9.0), (18, 18, 8.5),
-(19, 19, 7.0), (20, 20, 6.5);
+(19, 19, 7.0), (20, 20, 6.5), (21, 5, 8.9), (22,6,9),(23, 8, 7.6);
 
 -- Adăugarea de noi raioane
 INSERT INTO Raioane (Nume) VALUES 
@@ -137,7 +168,7 @@ INSERT INTO Localitati (Nume, ID_Raion) VALUES
 ('Leova', 13), ('Nisporeni', 14), ('Cimislia', 15), ('Stefan Voda', 16),
 ('Anenii Noi', 17), ('Calarasi', 18), ('Telenesti', 19), ('Straseni', 20);
 -- Afișarea studenților cu vârsta calculată
-SELECT Nume, Prenume, DATEDIFF(YEAR, Data_Nasterii, GETDATE()) AS Varsta 
+SELECT Nume, Prenume, DATEDIFF(Year, Data_Nasterii, GETDATE()) AS Varsta 
 FROM Studenti;
 
 -- Media notelor pe curs
@@ -169,23 +200,23 @@ JOIN Studenti S ON G.ID_Grupa = S.ID_Grupa
 JOIN Note N ON S.ID_Student = N.ID_Student
 WHERE N.Nota < 5;
 
--- Afișați numele și prenumele studenților care au note de 8 și au o familie "Popescu".
+-- Studenții cu nota 8 și numele 'Popescu'
 SELECT S.Nume, S.Prenume
 FROM Studenti S
 JOIN Note N ON S.ID_Student = N.ID_Student
 WHERE N.Nota = 8 AND S.Nume = 'Popescu';
 
--- Să se afișeze nr. de profesori de la fiecare catedra.
-SELECT P.Catedra, COUNT(P.ID_Profesor) AS Nr_Profesori
-FROM Profesori P
-GROUP BY P.Catedra;
+-- Numărul de profesori per catedră
+SELECT Catedra, COUNT(ID_Profesor) AS Nr_Profesori
+FROM Profesori
+GROUP BY Catedra;
 
--- Lista localităţilor şi numele raionului, respectiv.
+-- Lista localităților și raioanelor
 SELECT L.Nume AS Localitate, R.Nume AS Raion
 FROM Localitati L
 JOIN Raioane R ON L.ID_Raion = R.ID_Raion;
 
--- Lista grupelor, numele specialităţii, lista obiectelor şi numelui profesorului care preda obiectul.
+-- Lista grupelor, specialitatea, obiectele și profesorii
 SELECT G.Nume AS Grupa, G.Specialitate, C.Nume AS Curs, P.Nume AS Profesor, P.Prenume AS Profesor_Prenume
 FROM Grupe G
 JOIN Studenti S ON G.ID_Grupa = S.ID_Grupa
@@ -193,31 +224,3 @@ JOIN Note N ON S.ID_Student = N.ID_Student
 JOIN Cursuri C ON N.ID_Curs = C.ID_Curs
 JOIN Profesori P ON C.ID_Profesor = P.ID_Profesor
 GROUP BY G.Nume, G.Specialitate, C.Nume, P.Nume, P.Prenume;
-
--- Să se determine câte grupe de studii sunt pentru fiecare an de admitere.
-SELECT An_Studiu, COUNT(ID_Grupa) AS Nr_Grupe
-FROM Grupe
-GROUP BY An_Studiu;
-
--- Să se determine câte localităţi sunt în fiecare raion.
-SELECT R.Nume AS Raion, COUNT(L.ID_Localitate) AS Nr_Localitati
-FROM Raioane R
-JOIN Localitati L ON R.ID_Raion = L.ID_Raion
-GROUP BY R.Nume;
-
--- Să se determine câte grupe sunt la fiecare specialitate.
-SELECT Specialitate, COUNT(ID_Grupa) AS Nr_Grupe
-FROM Grupe
-GROUP BY Special
-
-SELECT Localitate, COUNT(*) as numar_studenti
-FROM Studenti
-GROUP BY Localitate;
-
-ALTER TABLE Studenti
-ADD ID_Localitate INT FOREIGN KEY REFERENCES Localitati(ID_Localitate) ON DELETE CASCADE;
-
-SELECT L.Nume AS Localitate, COUNT(S.ID_Student) AS Student_Count
-FROM Studenti S
-JOIN Localitati L ON S.ID_Localitate = L.ID_Localitate
-GROUP BY L.Nume;
